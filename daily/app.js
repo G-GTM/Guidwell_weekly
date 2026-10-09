@@ -14,7 +14,7 @@ function md(t){
 function load(cb){
   fetch('data.json?'+Date.now()).then(function(r){return r.json()}).then(function(d){
     d.leads=(d.leads||[]).map(function(x){
-      try{x.obj=JSON.parse(x.lead)}catch(e){x.obj=null}
+      try{x.obj=JSON.parse(x.lead);['jobTitle','headline'].forEach(function(k){if(x.obj[k+'Enc']!==undefined){try{x.obj[k]=decodeURIComponent(x.obj[k+'Enc'])}catch(e){x.obj[k]=x.obj[k+'Enc']}delete x.obj[k+'Enc']}})}catch(e){x.obj=null}
       x.replied=Number(x.fingerprint)>1;
       x.campaign=x.campaign||'(no campaign)';
       return x;
